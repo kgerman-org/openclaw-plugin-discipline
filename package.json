@@ -1,0 +1,28 @@
+{
+  "name": "@kgerman-org/openclaw-plugin-discipline",
+  "version": "0.1.0",
+  "description": "OpenClaw plugin: paste-bomb guard via message_sending hook (L2-B per ADR #31)",
+  "type": "module",
+  "private": true,
+  "openclaw": {
+    "extensions": ["./src/index.ts"],
+    "compat": {
+      "pluginApi": ">=2026.5.4",
+      "minGatewayVersion": "2026.5.4"
+    },
+    "build": {
+      "openclawVersion": "2026.5.4",
+      "pluginSdkVersion": "2026.5.4"
+    }
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "openclaw": "^2026.5.4",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}

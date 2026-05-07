@@ -1,0 +1,38 @@
+{
+  "id": "openclaw-discipline",
+  "name": "OpenClaw discipline guard",
+  "description": "L2-B paste-bomb guard via message_sending hook (kgerman-org/kgerman-infra#319, ADR #31)",
+  "version": "0.1.0",
+  "activation": {
+    "onStartup": true
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "lengthCapHard": {
+        "type": "integer",
+        "minimum": 100,
+        "default": 2000,
+        "description": "Outbound length above which delivery is cancelled."
+      },
+      "lengthCapBorderline": {
+        "type": "integer",
+        "minimum": 100,
+        "default": 1500,
+        "description": "Above this length, weak regex matches trigger truncate-rewrite instead of cancel."
+      },
+      "truncateTo": {
+        "type": "integer",
+        "minimum": 100,
+        "default": 1000,
+        "description": "Truncate length for borderline rewrite."
+      },
+      "logPath": {
+        "type": "string",
+        "default": "/var/log/openclaw/discipline-blocks.jsonl",
+        "description": "JSONL append-only log path. Metadata only (no raw content) per ADR #33."
+      }
+    }
+  }
+}
