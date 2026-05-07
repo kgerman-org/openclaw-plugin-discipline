@@ -5,7 +5,7 @@
   "type": "module",
   "private": true,
   "openclaw": {
-    "extensions": ["./src/index.ts"],
+    "extensions": ["./dist/index.js"],
     "compat": {
       "pluginApi": ">=2026.5.4",
       "minGatewayVersion": "2026.5.4"
@@ -15,7 +15,9 @@
       "pluginSdkVersion": "2026.5.4"
     }
   },
+  "main": "./dist/index.js",
   "scripts": {
+    "build": "tsc",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
