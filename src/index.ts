@@ -33,6 +33,9 @@ export default definePluginEntry({
       "message_sending",
       async (event: MessageSendingEvent): Promise<MessageSendingResult> => {
         const content = event.content ?? "";
+        console.error(
+          `[openclaw-discipline] message_sending hook invoked: contentLength=${content.length}, channel=${event.metadata?.channel ?? event.context?.channelId ?? "unknown"}`,
+        );
         if (!content) return undefined;
 
         const config: DisciplineConfig = {

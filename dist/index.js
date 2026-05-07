@@ -7,6 +7,7 @@ export default definePluginEntry({
     register(api) {
         api.on("message_sending", async (event) => {
             const content = event.content ?? "";
+            console.error(`[openclaw-discipline] message_sending hook invoked: contentLength=${content.length}, channel=${event.metadata?.channel ?? event.context?.channelId ?? "unknown"}`);
             if (!content)
                 return undefined;
             const config = {
