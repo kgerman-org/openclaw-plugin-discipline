@@ -68,23 +68,25 @@ export default definePluginEntry({
 
     api.on(
       "message_sending",
-      async (event: AnyEvent) => guardHandler(event, "message_sending"),
+      async (event) => guardHandler(event as AnyEvent, "message_sending"),
       { priority: 50 },
     );
     api.on(
       "before_dispatch",
-      async (event: AnyEvent) => guardHandler(event, "before_dispatch"),
+      // @ts-expect-error: relaxed any-event for diag
+      async (event) => guardHandler(event as AnyEvent, "before_dispatch"),
       { priority: 50 },
     );
     api.on(
       "reply_dispatch",
-      async (event: AnyEvent) => guardHandler(event, "reply_dispatch"),
+      // @ts-expect-error: relaxed any-event for diag
+      async (event) => guardHandler(event as AnyEvent, "reply_dispatch"),
       { priority: 50 },
     );
     api.on(
       "message_sent",
-      async (event: AnyEvent) => {
-        diag("message_sent", event);
+      async (event) => {
+        diag("message_sent", event as unknown as AnyEvent);
         return undefined;
       },
     );

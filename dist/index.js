@@ -38,8 +38,12 @@ export default definePluginEntry({
             return { content: decision.content };
         };
         api.on("message_sending", async (event) => guardHandler(event, "message_sending"), { priority: 50 });
-        api.on("before_dispatch", async (event) => guardHandler(event, "before_dispatch"), { priority: 50 });
-        api.on("reply_dispatch", async (event) => guardHandler(event, "reply_dispatch"), { priority: 50 });
+        api.on("before_dispatch", 
+        // @ts-expect-error: relaxed any-event for diag
+        async (event) => guardHandler(event, "before_dispatch"), { priority: 50 });
+        api.on("reply_dispatch", 
+        // @ts-expect-error: relaxed any-event for diag
+        async (event) => guardHandler(event, "reply_dispatch"), { priority: 50 });
         api.on("message_sent", async (event) => {
             diag("message_sent", event);
             return undefined;
