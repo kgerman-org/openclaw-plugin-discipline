@@ -1,13 +1,23 @@
 import { definePluginEntry } from "openclaw/plugin-sdk/plugin-entry";
 import { DEFAULT_CONFIG, decide, logDecision, } from "./handler.js";
+function diag(name, event) {
+    const len = (event.content ?? event.text ?? event.payload?.content ?? event.payload?.text ?? "")
+        .length;
+    console.error(`[openclaw-discipline] hook=${name} contentLen=${len} channel=${event.metadata?.channel ?? event.context?.channelId ?? "?"} keys=${Object.keys(event).join(",")}`);
+}
 export default definePluginEntry({
     id: "openclaw-discipline",
     name: "OpenClaw discipline guard",
     description: "L2-B paste-bomb guard via message_sending hook. Blocks long outbound or raw-content patterns; logs metadata only.",
     register(api) {
-        api.on("message_sending", async (event) => {
-            const content = event.content ?? "";
-            console.error(`[openclaw-discipline] message_sending hook invoked: contentLength=${content.length}, channel=${event.metadata?.channel ?? event.context?.channelId ?? "unknown"}`);
+        console.error("[openclaw-discipline] plugin entry register() called");
+        api.on("gateway_start", async () => {
+            console.error("[openclaw-discipline] gateway_start hook fired");
+            return undefined;
+        });
+        const guardHandler = async (event, hookName) => {
+            diag(hookName, event);
+            const content = event.content ?? event.text ?? event.payload?.content ?? event.payload?.text ?? "";
             if (!content)
                 return undefined;
             const config = {
@@ -26,6 +36,13 @@ export default definePluginEntry({
                 return { cancel: true, cancelReason: decision.reason };
             }
             return { content: decision.content };
-        }, { priority: 50 });
+        };
+        api.on("message_sending", async (event) => guardHandler(event, "message_sending"), { priority: 50 });
+        api.on("before_dispatch", async (event) => guardHandler(event, "before_dispatch"), { priority: 50 });
+        api.on("reply_dispatch", async (event) => guardHandler(event, "reply_dispatch"), { priority: 50 });
+        api.on("message_sent", async (event) => {
+            diag("message_sent", event);
+            return undefined;
+        });
     },
 });
